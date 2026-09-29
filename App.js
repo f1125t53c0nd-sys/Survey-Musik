@@ -1,13 +1,10 @@
 /* =====================================================================
-   PENGATURAN — HANYA BAGIAN INI YANG WAJIB KAMU ISI
+   PENGATURAN — CUKUP ISI SATU LINK INI SAJA
    Tempel di antara tanda kutip "" (jangan hapus tanda kutipnya).
    ===================================================================== */
 const CONFIG = {
-  // 1) URL Web App dari Google Apps Script (berakhiran /exec)
-  WEB_APP_URL: "https://script.google.com/macros/s/AKfycbzkU8rtPRFYZnmRtmo4ZWrGMb6cc-r1rLbrLQPR3EtNBqbtyPso95BQCWLhD4Wao-5G/exec",
-
-  // 2) Link Google Spreadsheet tempat data disimpan
-  SPREADSHEET_URL: "https://docs.google.com/spreadsheets/d/1abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ/edit#gid=0"
+  // URL Web App dari Google Apps Script (berakhiran /exec)
+  WEB_APP_URL: "https://script.google.com/macros/s/AKfycbxR4Z-YNplfh1A7Q5EKKcBVkTaK1EZ5GRDoB9yQ9LT8VyCZgkmmQxDKrJMs-Tr2gVBv/exec"
 };
 /* ===================================================================== */
 
@@ -50,9 +47,6 @@ function pesan(teks) { $("formMsg").textContent = teks || ""; }
 function configSiap() {
   if (!CONFIG.WEB_APP_URL.startsWith("https://script.google.com/")) {
     return "Isi dulu WEB_APP_URL di file App.js (lihat panduan).";
-  }
-  if (!CONFIG.SPREADSHEET_URL.startsWith("https://docs.google.com/spreadsheets/")) {
-    return "Isi dulu SPREADSHEET_URL di file App.js (lihat panduan).";
   }
   return "";
 }
@@ -144,7 +138,7 @@ async function kirim(e) {
     const r = await fetch(CONFIG.WEB_APP_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ spreadsheetUrl: CONFIG.SPREADSHEET_URL, data })
+      body: JSON.stringify({ data })
     });
     const j = await r.json();
     if (!j.ok) throw new Error(j.pesan);
@@ -178,7 +172,7 @@ async function muatHasil() {
   if (cfg) { box.innerHTML = `<p class="error">${esc(cfg)}</p>`; return; }
   box.innerHTML = `<p class="loading">Memuat data terbaru...</p>`;
   try {
-    const url = CONFIG.WEB_APP_URL + "?action=hasil&sheet=" + encodeURIComponent(CONFIG.SPREADSHEET_URL) + "&t=" + Date.now();
+    const url = CONFIG.WEB_APP_URL + "?action=hasil&t=" + Date.now();
     const r = await fetch(url);
     const j = await r.json();
     if (!j.ok) throw new Error(j.pesan);

@@ -136,14 +136,6 @@ function ambilSheet(urlDariWebsite) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   if (!ss) throw new Error('Script ini harus dibuat lewat Ekstensi > Apps Script di dalam Google Spreadsheet.');
 
-  // Cek: link di App.js harus spreadsheet yang sama dengan tempat script ini
-  if (urlDariWebsite) {
-    const cocok = String(urlDariWebsite).match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if (!cocok || cocok[1] !== ss.getId()) {
-      throw new Error('SPREADSHEET_URL di App.js tidak cocok dengan spreadsheet tempat Code.gs dipasang.');
-    }
-  }
-
   let sheet = ss.getSheetByName(NAMA_SHEET);
   if (!sheet) sheet = ss.insertSheet(NAMA_SHEET);
   if (sheet.getLastRow() === 0) {
