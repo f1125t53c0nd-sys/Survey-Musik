@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Survei Playlist Kita</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#FFC9DC; --pink-soft:#FFE6EF; --pink-deep:#C93A78; --pink-dark:#9C2A5A;
+  --butter:#FFEAA3; --butter-soft:#FFF6D6;
+  --ink:#4B2C3C; --muted:#8A6577; --paper:#FFFBF8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; color:var(--ink); line-height:1.5;
+  font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  background:var(--paper);
+  background-image:radial-gradient(circle at 8% 0%,var(--pink-soft),transparent 42%),
+                   radial-gradient(circle at 95% 8%,var(--butter-soft),transparent 38%);
+  background-attachment:fixed;
+}
+.wrap{max-width:760px; margin:0 auto; padding:0 18px 64px}
+h1,h2,h3,.stat b,button.utama{font-family:'Fredoka','Nunito',system-ui,sans-serif}
+
+/* Header + piringan hitam */
+.hero{display:flex; align-items:center; gap:20px; padding:34px 0 18px}
+.vinyl{
+  flex:none; width:92px; height:92px; border-radius:50%;
+  background:radial-gradient(circle,var(--paper) 0 5%,var(--butter) 6% 24%,transparent 25%),
+             repeating-radial-gradient(circle,#5a3a4b 0 3px,#4B2C3C 3px 6px);
+  box-shadow:0 5px 0 var(--pink);
+  animation:putar 9s linear infinite;
+}
+@keyframes putar{to{transform:rotate(360deg)}}
+.hero h1{margin:0; font-size:clamp(28px,6vw,38px); line-height:1.1; font-weight:600}
+.hero p{margin:6px 0 0; color:var(--muted)}
+
+/* Tab */
+.tabs{display:flex; gap:6px; padding:6px; margin-bottom:18px; background:var(--pink-soft); border-radius:999px}
+.tabs button{
+  flex:1; border:0; padding:10px 14px; border-radius:999px; cursor:pointer;
+  font:600 16px 'Fredoka',system-ui,sans-serif; color:var(--muted); background:transparent;
+  transition:background .2s,color .2s;
+}
+.tabs button.aktif{background:var(--butter); color:var(--ink)}
+
+/* Kartu */
+.card{
+  background:#fff; border:2px solid var(--pink-soft); border-radius:24px;
+  padding:22px; box-shadow:0 6px 0 var(--pink-soft); margin-bottom:18px;
+}
+.q{margin-bottom:26px}
+.q h3{margin:0 0 4px; font-size:18px; font-weight:500}
+.q h3 small{font:400 13px 'Nunito',sans-serif; color:var(--muted)}
+.hint{margin:0 0 10px; font-size:13px; color:var(--muted)}
+input[type=text],select{
+  width:100%; padding:11px 14px; font:inherit; color:var(--ink); background:#fff;
+  border:2px solid var(--pink); border-radius:14px; transition:border-color .2s;
+}
+input[type=text]:focus,select:focus{outline:none; border-color:var(--pink-deep)}
+
+/* Pilihan berbentuk permen */
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{position:relative}
+.chip input{position:absolute; opacity:0; inset:0; cursor:pointer}
+.chip span{
+  display:inline-block; padding:8px 15px; border-radius:999px; cursor:pointer;
+  background:var(--pink-soft); border:2px solid transparent;
+  transition:transform .15s,background .15s,border-color .15s;
+}
+.chip:hover span{transform:translateY(-2px)}
+.chip input:checked + span{background:var(--butter); border-color:var(--pink-deep); font-weight:700}
+.chip input:focus-visible + span{outline:3px solid var(--pink-deep); outline-offset:2px}
+
+/* Rating nada */
+.rate{display:flex; gap:4px}
+.rate button{
+  border:0; background:none; padding:2px; font-size:32px; cursor:pointer; line-height:1;
+  filter:grayscale(1) opacity(.3); transition:transform .15s,filter .15s;
+}
+.rate button.on{filter:none}
+.rate button:hover{transform:scale(1.2) rotate(-6deg)}
+.rate button:focus-visible{outline:3px solid var(--pink-deep); border-radius:8px}
+.rate-ends{display:flex; justify-content:space-between; max-width:250px; font-size:12px; color:var(--muted)}
+
+/* Tombol */
+button.utama{
+  border:0; cursor:pointer; padding:14px 30px; border-radius:999px; font-size:18px; font-weight:500;
+  color:#fff; background:var(--pink-deep); box-shadow:0 5px 0 var(--pink-dark);
+  transition:transform .1s,box-shadow .1s;
+}
+button.utama:hover{transform:translateY(-2px); box-shadow:0 7px 0 var(--pink-dark)}
+button.utama:active{transform:translateY(4px); box-shadow:0 1px 0 var(--pink-dark)}
+button.utama:disabled{opacity:.6; cursor:wait}
+button.utama:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+button.kedua{
+  border:2px solid var(--pink); background:#fff; color:var(--ink); padding:10px 20px;
+  border-radius:999px; font:600 15px 'Nunito',sans-serif; cursor:pointer;
+}
+button.kedua:hover{background:var(--pink-soft)}
+.pesan{min-height:22px; margin:12px 0 0; font-weight:700; color:var(--pink-deep)}
+
+/* Terima kasih */
+.terimakasih{text-align:center; padding:34px 22px; animation:muncul .45s cubic-bezier(.3,1.4,.5,1)}
+.terimakasih .emoji{font-size:54px}
+.terimakasih h2{margin:6px 0}
+.terimakasih .aksi{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:18px}
+@keyframes muncul{from{transform:scale(.85); opacity:0}to{transform:none; opacity:1}}
+
+/* Hasil */
+.bar-atas{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px}
+.bar-atas h2{margin:0; font-size:22px; font-weight:600}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:18px}
+.stat{padding:16px; border-radius:20px; background:var(--pink-soft)}
+.stat:nth-child(even){background:var(--butter-soft)}
+.stat span{display:block; font-size:13px; color:var(--muted)}
+.stat b{display:block; margin-top:2px; font-size:22px; font-weight:600; overflow-wrap:anywhere}
+.card h3{margin:0 0 10px; font-size:18px; font-weight:500}
+.baris{display:grid; grid-template-columns:120px 1fr 34px; gap:10px; align-items:center; margin:9px 0; font-size:14px}
+.baris .nama{overflow-wrap:anywhere}
+.baris .angka{text-align:right; font-weight:700}
+.track{height:14px; border-radius:99px; background:var(--pink-soft); overflow:hidden}
+.fill{height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,#F48FB1,#F6C445); transition:width .9s cubic-bezier(.2,.8,.2,1)}
+table{width:100%; border-collapse:collapse; font-size:15px}
+td{padding:9px 6px; border-bottom:2px dashed var(--pink-soft)}
+td:first-child{width:36px; font-family:'Fredoka',sans-serif; color:var(--pink-deep)}
+td:last-child{text-align:right; font-weight:700}
+.loading,.kosong,.error{text-align:center; padding:30px 10px; color:var(--muted)}
+.error{color:var(--pink-deep); font-weight:700}
+.catatan{font-size:12px; color:var(--muted); text-align:center; margin-top:8px}
+
+@media (max-width:520px){
+  .hero{gap:14px} .vinyl{width:70px; height:70px}
+  .baris{grid-template-columns:92px 1fr 30px}
+  .card{padding:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important; transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="vinyl" aria-hidden="true"></div>
+    <div>
+      <h1>Survei Playlist Kita</h1>
+      <p>Ceritakan kebiasaan musikmu. Cuma sekitar 2 menit!</p>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Menu">
+    <button type="button" class="aktif" data-view="form">Isi Survei</button>
+    <button type="button" data-view="hasil">Lihat Hasil</button>
+  </nav>
+
+  <main>
+    <section id="view-form">
+      <form id="surveyForm" class="card" novalidate>
+        <div id="questions"></div>
+        <button type="submit" id="submitBtn" class="utama">Kirim jawaban</button>
+        <p id="formMsg" class="pesan" role="status" aria-live="polite"></p>
+      </form>
+      <div id="terimaKasih" class="card terimakasih" hidden>
+        <div class="emoji">🎶</div>
+        <h2>Terima kasih sudah mengisi!</h2>
+        <p>Jawabanmu sudah masuk ke daftar playlist kita.</p>
+        <div class="aksi">
+          <button type="button" class="utama" id="btnLihatHasil">Lihat hasil</button>
+          <button type="button" class="kedua" id="btnIsiLagi">Isi lagi</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-hasil" hidden>
+      <div class="bar-atas">
+        <h2>Hasil Survei</h2>
+        <button type="button" class="kedua" id="btnSegarkan">Segarkan data</button>
+      </div>
+      <div id="hasilBox"></div>
+    </section>
+  </main>
+
+</div>
+
+<!-- Pastikan file App.js berada di folder yang sama dengan file ini -->
+<script src="App.js"></script>
+</body>
+</html>
